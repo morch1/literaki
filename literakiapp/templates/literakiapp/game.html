@@ -1,0 +1,29 @@
+{% extends 'literakiapp/base.html' %}
+{% load static %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<div id='board'>
+{% for row in board %}
+    {% for field in row %}
+        <div id='field-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}' class='board-field field-{{ field }}'></div>
+    {% endfor %}
+{% endfor %}
+</div>
+<div id='my-letters'>
+    {% for i in  '1234567'|make_list %}
+        <div id='myletter-{{ i }}' class='myletter-slot'></div>
+    {% endfor %}
+</div>
+<div id='buttons'>
+    <input id='btn_submit' type='button' value='zatwierdź'>
+    <input id='btn_exchange' type='button' value='wymień'>
+    <input id='btn_pass' type='button' value='pas'>
+</div>
+<div id='vote_buttons'>
+    <input id='btn_vote_accept' type='button' value='zatwierdź'>
+    <input id='btn_vote_reject' type='button' value='odrzuć'>
+</div>
+{% endblock %}

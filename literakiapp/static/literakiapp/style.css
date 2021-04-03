@@ -1,0 +1,78 @@
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#board {
+    border: 4px solid black;
+    display: grid;
+    width: 600px;
+    /* margin: 5px; */
+    grid-template-columns: repeat(15, 40px);
+    grid-auto-rows: 40px;
+}
+
+.board-field {
+    border: 1px solid white;
+    box-shadow: -2px -2px 8px 3px rgba(0, 0, 0, 0.3) inset;
+}
+
+.field-0 {
+    background-color: #019c8e;
+}
+
+.field-1 {
+    background-color: #EABCAA;
+}
+
+.field-2 {
+    background-color: #C7E2F3;
+}
+
+.field-3 {
+    background-color: #23CCF8;
+}
+
+.field-4 {
+    background-color: #EABCAA;
+}
+
+.field-5 {
+    background-color: #F31E17;
+}
+
+
+#my-letters {
+    display: grid;
+    width: 400px;
+    grid-template-columns: repeat(7, 36px);
+    grid-auto-rows: 36px;
+    gap: 4px;
+    padding: 4px;
+}
+
+.letter {
+    user-select: none;
+    box-shadow: 0 0 5px 0 black inset;
+    text-align: center;
+    line-height: 34px;
+    vertical-align: middle;
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.myletter-slot {
+    box-shadow: -2px -2px 8px 3px rgba(0, 0, 0, 0.3) inset;
+    background-color: #bbb;
+}
+
+#buttons {
+    display: none;
+}
+
+#vote_buttons {
+    display: none;
+}
+
+#start_button {
+    display: none;
+}
