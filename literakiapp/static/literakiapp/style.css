@@ -76,3 +76,11 @@ body {
 #start_button {
     display: none;
 }
+
+.plylist_current {
+    font-weight: 900;
+}
+
+.plylist_me {
+    color: green;
+}

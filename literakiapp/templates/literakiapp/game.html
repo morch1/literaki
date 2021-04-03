@@ -1,10 +1,11 @@
-{% extends 'literakiapp/base.html' %}
+{% extends 'literakiapp/game_common.html' %}
 {% load static %}
 
-{% block head %}
+{% block game_head %}
+<script src="{% static 'literakiapp/game.js' %}"></script>
 {% endblock %}
 
-{% block body %}
+{% block game_body %}
 <div id='board'>
 {% for row in board %}
     {% for field in row %}
@@ -26,4 +27,9 @@
     <input id='btn_vote_accept' type='button' value='zatwierdź'>
     <input id='btn_vote_reject' type='button' value='odrzuć'>
 </div>
+<ul id="plylist">
+    {% for p in players %}
+        <li id="player-{{ p.id }}" class="{% if p == current_player %}plylist_current{% endif %} {% if p == me %}plylist_me{% endif %}"><span id="player-name-{{ p.id }}">{{ p.player.name }}</span> - {{ p.score }}</li>
+    {% endfor %}
+</ul>
 {% endblock %}

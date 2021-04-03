@@ -1,0 +1,19 @@
+{% extends 'literakiapp/base.html' %}
+{% load static %}
+
+{% block head %}
+<script>
+    game_token = "{{ game_token }}";
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+</script>
+<script src="{% static 'literakiapp/reconnecting-websocket.js' %}"></script>
+<script src="{% static 'literakiapp/game_common.js' %}"></script>
+{% block game_head %}{% endblock %}
+{% endblock %}
+
+{% block body %}
+<input id="leave" type="button" value="<< wyjdź">
+{% block game_body %}{% endblock %}
+{% endblock %}

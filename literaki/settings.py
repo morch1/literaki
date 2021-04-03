@@ -5,9 +5,38 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '.env')
 
-DEBUG = bool(int(os.getenv('DEBUG', False)))
+TEST_SERVER = bool(int(os.getenv('TEST_SERVER', False)))
 SECRET_KEY = os.getenv('SECRET_KEY')
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '192.168.100.11', 'x.morchkovalski.com']
+
+if TEST_SERVER:
+    DEBUG = True
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '192.168.100.11', 'x.morchkovalski.com']
+    STATIC_URL = '/static/'
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'local' / 'db.sqlite3',
+        }
+    }
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels.layers.InMemoryChannelLayer"
+        }
+    }
+else:
+    # TODO: prod settings
+    DEBUG = False
+    ALLOWED_HOSTS = []
+    STATIC_URL = ''
+    DATABASES = {}
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts": [('127.0.0.1', 6379)],
+            },
+        },
+    }
 
 MAX_PLAYERS = int(os.getenv('MAX_PLAYERS', 4))
 
@@ -19,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -51,15 +81,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'literaki.wsgi.application'
-
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'local' / 'db.sqlite3',
-    }
-}
-
+ASGI_APPLICATION = "literaki.asgi.application"
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -78,14 +100,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
-
-
-STATIC_URL = '/static/'
