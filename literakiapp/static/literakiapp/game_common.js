@@ -10,6 +10,12 @@ ws.addEventListener('message', function(event) {
 });
 
 $(function(){
+    $('#change_name').click(function(){
+        $.post('/game/' + game_token + '/change_name', {
+            new_name: $('#plyname').val()
+        })
+    });
+
     $('#leave').click(function(){
         if (confirm('na pewno chcesz wyjść?')) {
             ws.close();

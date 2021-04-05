@@ -3,17 +3,21 @@
 
 {% block head %}
 <script>
-    game_token = "{{ game_token }}";
+    game_token = "{{ game.token }}";
     $.ajaxSetup({
         data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
     });
 </script>
 <script src="{% static 'literakiapp/reconnecting-websocket.js' %}"></script>
-<script src="{% static 'literakiapp/game_common.js' %}"></script>
+<script src="{% static 'literakiapp/game_common.js' %}?1"></script>
 {% block game_head %}{% endblock %}
 {% endblock %}
 
 {% block body %}
+<p>
 <input id="leave" type="button" value="<< wyjdź">
+<input id="plyname" type="text" value="{{ me.player.name }}" maxlength="16">
+<input id="change_name" type="button" value="zmień nick">
+</p>
 {% block game_body %}{% endblock %}
 {% endblock %}

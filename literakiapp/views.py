@@ -50,7 +50,7 @@ def game(request, game_token):
                 raise PermissionDenied('pokój jest pełny')
         players = game.playeringame_set.all()
         context = {
-            'game_token': game_token,
+            'game': game,
             'me': game_player,
             'players': players,
         }
@@ -75,13 +75,11 @@ def game(request, game_token):
             [0, 4, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 4, 0],
             [5, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 5],
         ]
-        players = game.playeringame_set.order_by('-score')
-        current_player = game.playeringame_set.order_by('-order').first()
+        players = game.playeringame_set.order_by('order')
         context = {
+            'game': game,
             'me': game_player,
             'players': players,
-            'current_player': current_player,
-            'game_token': game_token,
             'board': board,
         }
         return render(request, 'literakiapp/game.html', context)
@@ -103,6 +101,7 @@ def change_name(request, game_token):
 def _check_start(game):
     players = game.playeringame_set.order_by('?')
     if players.count() > 1 and all(p.ready for p in players):
+        game.current_player = players.first()
         for i, p in enumerate(players):
             p.order = i
             p.letters = game.letters[:7]

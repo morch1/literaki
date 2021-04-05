@@ -2,25 +2,21 @@
 ws.addEventListener('message', function(event) {
     var data = JSON.parse(event.data);
     if (data['msg_type'] == 'player_joined') {
-        $('#plylist').append(
-            `<li id="player-${data["player_id"]}"><span id="player-name-${data["player_id"]}">${data["player_name"]}</span></li>`
-        )
+        $('#plylist').append(`
+            <tr id="player-${data["player_id"]}">
+                <td id="player-${data["player_id"]}-ready"></td>
+                <td id="player-name-${data["player_id"]}">${data["player_name"]}</td>
+            </tr>`)
     } else if (data['msg_type'] == 'player_left') {
         $('#player-' + data['player_id']).remove()
     } else if (data['msg_type'] == 'player_ready') {
-        $('#player-' + data['player_id']).append(' ✔️')
+        $('#player-' + data['player_id'] + '-ready').append(' ✔️')
     } else if (data['msg_type'] == 'game_started') {
         setTimeout(() => {  location.reload(); }, 1000);
     }
 });
 
 $(function(){
-    $('#change_name').click(function(){
-        $.post('/game/' + game_token + '/change_name', {
-            new_name: $('#plyname').val()
-        })
-    });
-
     $('#start').click(function(){
         $.post('/game/' + game_token + '/ready')
         $(this).val('⌛')

@@ -2,34 +2,49 @@
 {% load static %}
 
 {% block game_head %}
-<script src="{% static 'literakiapp/game.js' %}"></script>
+<script>
+    var my_letters = "{{ me.letters }}";
+    var current_player_id = "{{ game.current_player.id }}";
+    var me_id = "{{ me.id }}";
+    var voting = "{{ game.voting }}" == "True";
+</script>
+<script src="{% static 'literakiapp/DragDropTouch.js' %}"></script>
+<script src="{% static 'literakiapp/game.js' %}?1"></script>
 {% endblock %}
 
 {% block game_body %}
-<div id='board'>
-{% for row in board %}
-    {% for field in row %}
-        <div id='field-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}' class='board-field field-{{ field }}'></div>
+<div id="game-wrap">
+    <div id='board'>
+    {% for row in board %}
+        {% for field in row %}
+            <div id='field-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}' class='board-field field-{{ field }}' ondrop='on_field_drop(event)' ondragover='on_field_dragover(event)'></div>
+        {% endfor %}
     {% endfor %}
-{% endfor %}
+    </div>
+    <div id="game-side">
+        <div id='my-letters'>
+            {% for i in  '0123456'|make_list %}
+                <div id='myletter-slot-{{ i }}' class='myletter-slot' ondrop='on_field_drop(event)' ondragover='on_field_dragover(event)'></div>
+            {% endfor %}
+        </div>
+        <div id='buttons' class='game-btns'>
+            <input id='btn_submit' type='button' value='✔️ (+0)' class='game-btn'>
+            <input id='btn_exchange' type='button' value='wymiana' class='game-btn'>
+        </div>
+        <div id='vote_buttons' class='game-btns'>
+            <input id='btn_vote_accept' type='button' value='✔️' class='game-btn'>
+            <input id='btn_vote_reject' type='button' value='❌' class='game-btn'>
+        </div>
+        <table id="plylist">
+            {% for p in players %}
+                <tr id="player-{{p.id}}">
+                    <td id="player-{{p.id}}-current" class="plylist-small">{% if p == game.current_player %}⮞{% endif %}</td>
+                    <td id="player-name-{{ p.id }}">{{ p.player.name }}</td>
+                    <td id="player-{{p.id}}-score" class="plylist-score">{{ p.score }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <p class='letters-left'>pozostało <span id="letters_left">{{game.letters|length}}</span> liter</p>
+    </div>
 </div>
-<div id='my-letters'>
-    {% for i in  '1234567'|make_list %}
-        <div id='myletter-{{ i }}' class='myletter-slot'></div>
-    {% endfor %}
-</div>
-<div id='buttons'>
-    <input id='btn_submit' type='button' value='zatwierdź'>
-    <input id='btn_exchange' type='button' value='wymień'>
-    <input id='btn_pass' type='button' value='pas'>
-</div>
-<div id='vote_buttons'>
-    <input id='btn_vote_accept' type='button' value='zatwierdź'>
-    <input id='btn_vote_reject' type='button' value='odrzuć'>
-</div>
-<ul id="plylist">
-    {% for p in players %}
-        <li id="player-{{ p.id }}" class="{% if p == current_player %}plylist_current{% endif %} {% if p == me %}plylist_me{% endif %}"><span id="player-name-{{ p.id }}">{{ p.player.name }}</span> - {{ p.score }}</li>
-    {% endfor %}
-</ul>
 {% endblock %}

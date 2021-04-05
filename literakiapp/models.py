@@ -11,7 +11,7 @@ def randname():
 
 
 def randletters():
-    letters = list('a' * 9 + 'ą' + 'b' * 2 + 'c' * 3 + 'ć' + 'd' * 3 + 'e' * 7 + 'ę' * 1 + 'f' * 1 + 'g' * 2 + 'h' * 2 + 'i' * 8 + 'j' * 2 + 'k' * 3 + 'l' * 3 + 'ł' * 2 + 'm' * 3 + 'n' * 5 + 'ń' + 'o' * 6 + 'ó' + 'p' * 3 + 'r' * 4 + 's' * 4 + 'ś' + 't' * 3 + 'u' * 2 + 'w' * 4 + 'y' * 4 + 'z' * 5 + 'ź' + 'ż' + ' ' * 2)
+    letters = list('A' * 9 + 'Ą' + 'B' * 2 + 'C' * 3 + 'Ć' + 'D' * 3 + 'E' * 7 + 'Ę' * 1 + 'F' * 1 + 'G' * 2 + 'H' * 2 + 'I' * 8 + 'J' * 2 + 'K' * 3 + 'L' * 3 + 'Ł' * 2 + 'M' * 3 + 'N' * 5 + 'Ń' + 'O' * 6 + 'Ó' + 'P' * 3 + 'R' * 4 + 'S' * 4 + 'Ś' + 'T' * 3 + 'U' * 2 + 'W' * 4 + 'Y' * 4 + 'Z' * 5 + 'Ź' + 'Ż' + ' ' * 2)
     random.shuffle(letters)
     return ''.join(letters)
 
@@ -28,6 +28,8 @@ class Game(models.Model):
     token = models.CharField(max_length=32, default=randid, unique=True)
     started = models.BooleanField(default=False)
     letters = models.CharField(max_length=100, default=randletters)
+    voting = models.BooleanField(default=False)
+    current_player = models.ForeignKey('PlayerInGame', on_delete=models.SET_NULL, null=True, default=None, related_name='current_in_game')
 
     def __str__(self) -> str:
         return self.token

@@ -2,6 +2,19 @@ body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+#game-wrap {
+    display: grid;
+    width: 900px;
+    grid-template-columns: 630px 328px;
+    grid-auto-rows: 608px;
+}
+
+#game-side {
+    grid-column-start: 2;
+    padding: 4px;
+    border: 4px solid black;
+}
+
 #board {
     border: 4px solid black;
     display: grid;
@@ -9,11 +22,14 @@ body {
     /* margin: 5px; */
     grid-template-columns: repeat(15, 40px);
     grid-auto-rows: 40px;
+    grid-column-start: 1;
+    grid-column-end: 2;
 }
 
 .board-field {
     border: 1px solid white;
     box-shadow: -2px -2px 8px 3px rgba(0, 0, 0, 0.3) inset;
+    padding: 2px;
 }
 
 .field-0 {
@@ -21,7 +37,7 @@ body {
 }
 
 .field-1 {
-    background-color: #EABCAA;
+    background-color: #bd998b;
 }
 
 .field-2 {
@@ -43,9 +59,9 @@ body {
 
 #my-letters {
     display: grid;
-    width: 400px;
-    grid-template-columns: repeat(7, 36px);
-    grid-auto-rows: 36px;
+    width: 304px;
+    grid-template-columns: repeat(7, 40px);
+    grid-auto-rows: 40px;
     gap: 4px;
     padding: 4px;
 }
@@ -53,34 +69,68 @@ body {
 .letter {
     user-select: none;
     box-shadow: 0 0 5px 0 black inset;
+    border-radius: 5px;
+    background-color: white;
     text-align: center;
-    line-height: 34px;
+    width: 34px;
+    line-height: 33px;
+    height: 34px;
     vertical-align: middle;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 900;
 }
 
 .myletter-slot {
     box-shadow: -2px -2px 8px 3px rgba(0, 0, 0, 0.3) inset;
     background-color: #bbb;
+    padding: 3px;
 }
 
-#buttons {
-    display: none;
+.game-btns {
+    display: grid;
+    grid-template-columns: repeat(2, 147px);
+    gap: 10px;
+    padding: 4px;
 }
 
-#vote_buttons {
-    display: none;
+.game-btn {
+    width: 147px;
+    font-size: 20px;
+    height: 50px;
 }
 
-#start_button {
-    display: none;
+#start {
+    width: 304px;
+    height: 70px;
+    margin: 4px;
+    font-size: 30px;
 }
 
-.plylist_current {
+#plylist {
+    width: 304px;
+    margin: 4px;
+}
+
+#plylist td {
+    margin: 4px;
+    padding: 5px;
+    border: 1px solid black;
+    height: 25px;
+}
+
+.plylist-small {
+    width: 25px;
+    text-align: center;
+}
+
+.plylist-score {
+    width: 80px;
+}
+
+.letters-left {
+    text-align: center;
+}
+
+#letters_left {
     font-weight: 900;
-}
-
-.plylist_me {
-    color: green;
 }

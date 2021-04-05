@@ -2,20 +2,21 @@
 {% load static %}
 
 {% block game_head %}
-<script src="{% static 'literakiapp/lobby.js' %}"></script>
+<script src="{% static 'literakiapp/lobby.js' %}?1"></script>
 {% endblock %}
 
 {% block game_body %}
-<input id="plyname" type="text" value="{{ me.player.name }}">
-<input id="change_name" type="button" value="zmień nick">
 {% if me.ready %}
 <input id="start" type="button" value="⌛" disabled>
 {% else %}
-<input id="start" type="button" value="start">
+<input id="start" type="button" value="✔️">
 {% endif %}
-<ul id="plylist">
+<table id="plylist">
     {% for p in players %}
-        <li id="player-{{ p.id }}"><span id="player-name-{{ p.id }}">{{ p.player.name }}</span> {% if p.ready %}✔️{% endif %}</li>
+        <tr id="player-{{p.id}}">
+            <td id="player-{{p.id}}-ready" class='plylist-small'>{% if p.ready %}✔️{% endif %}</td>
+            <td id="player-name-{{ p.id }}">{{ p.player.name }}</td>
+        </tr>
     {% endfor %}
-</ul>
+</table>
 {% endblock %}
