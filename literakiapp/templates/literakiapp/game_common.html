@@ -3,7 +3,10 @@
 
 {% block head %}
 <script>
-    game_token = "{{ game.token }}";
+    var game_token = "{{ game.token }}";
+    var me_id = "{{ me.id }}";
+    var ws_priv_id = "{{ me.token }}";
+    var me_is_admin = "{{ me.is_admin }}" == "True";
     $.ajaxSetup({
         data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
     });

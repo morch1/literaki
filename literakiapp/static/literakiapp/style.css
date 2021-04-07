@@ -80,6 +80,10 @@ body {
     font-weight: 900;
 }
 
+.letter-undecided {
+    background-color: yellow;
+}
+
 .myletter-slot {
     box-shadow: -2px -2px 8px 3px rgba(0, 0, 0, 0.3) inset;
     background-color: #bbb;
@@ -133,4 +137,8 @@ body {
 
 #letters_left {
     font-weight: 900;
+}
+
+.player_name_left {
+    text-decoration: line-through;
 }

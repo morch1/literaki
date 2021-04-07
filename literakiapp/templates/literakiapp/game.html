@@ -5,7 +5,6 @@
 <script>
     var my_letters = "{{ me.letters }}";
     var current_player_id = "{{ game.current_player.id }}";
-    var me_id = "{{ me.id }}";
     var voting = "{{ game.voting }}" == "True";
 </script>
 <script src="{% static 'literakiapp/DragDropTouch.js' %}"></script>
@@ -17,18 +16,22 @@
     <div id='board'>
     {% for row in board %}
         {% for field in row %}
-            <div id='field-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}' class='board-field field-{{ field }}' ondrop='on_field_drop(event)' ondragover='on_field_dragover(event)'></div>
+            <div id="field-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}" class='board-field field-{{ field.0 }} droppable' ondrop='on_field_drop(event)' ondragover='on_field_dragover(event)' data-x="{{forloop.counter0}}" data-y="{{forloop.parentloop.counter0}}">
+                {% if field.1 %}
+                    <div class="letter {% if not field.1.accepted %}letter-undecided{% endif %}">{{field.1.letter}}</div>
+                {% endif %}
+            </div>
         {% endfor %}
     {% endfor %}
     </div>
     <div id="game-side">
         <div id='my-letters'>
             {% for i in  '0123456'|make_list %}
-                <div id='myletter-slot-{{ i }}' class='myletter-slot' ondrop='on_field_drop(event)' ondragover='on_field_dragover(event)'></div>
+                <div id='myletter-slot-{{ i }}' class='myletter-slot droppable' ondrop='on_field_drop(event)' ondragover='on_field_dragover(event)' data-x="-1" data-y="{{i}}"></div>
             {% endfor %}
         </div>
         <div id='buttons' class='game-btns'>
-            <input id='btn_submit' type='button' value='✔️ (+0)' class='game-btn'>
+            <input id='btn_submit' type='button' value="{% if game.voting %}⌛{% else %}✔️{% endif %}" class='game-btn'>
             <input id='btn_exchange' type='button' value='wymiana' class='game-btn'>
         </div>
         <div id='vote_buttons' class='game-btns'>
@@ -39,7 +42,10 @@
             {% for p in players %}
                 <tr id="player-{{p.id}}">
                     <td id="player-{{p.id}}-current" class="plylist-small">{% if p == game.current_player %}⮞{% endif %}</td>
-                    <td id="player-name-{{ p.id }}">{{ p.player.name }}</td>
+                    <td id="player-name-{{ p.id }}" {% if p.left %}class="player_name_left"{% endif %} >{{ p.player.name }}</td>
+                    {% if me.is_admin %}
+                    <td><input id="kick-player-{{p.id}}" class="player_kick_btn" type='button' value='❌' onclick="kick_player({{p.id}})" {% if p.left %}disabled{% endif %}></td>
+                    {% endif %}
                     <td id="player-{{p.id}}-score" class="plylist-score">{{ p.score }}</td>
                 </tr>
             {% endfor %}

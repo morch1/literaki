@@ -36,12 +36,16 @@ class Game(models.Model):
 
 
 class PlayerInGame(models.Model):
+    token = models.CharField(max_length=32, default=randid)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     letters = models.CharField(max_length=7, blank=True, default='')
     order = models.IntegerField(default=-1)
     ready = models.BooleanField(default=False)
     score = models.IntegerField(default=0)
+    left = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
+    vote = models.BooleanField(null=True, default=None)
 
     class Meta:
         unique_together = ['game', 'player']
@@ -52,7 +56,7 @@ class PlayerInGame(models.Model):
 
 class LetterOnBoard(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    player = models.ForeignKey(PlayerInGame, on_delete=models.CASCADE)
     accepted = models.BooleanField(default=False)
     x = models.IntegerField()
     y = models.IntegerField()

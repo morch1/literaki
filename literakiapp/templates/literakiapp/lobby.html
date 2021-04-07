@@ -9,13 +9,16 @@
 {% if me.ready %}
 <input id="start" type="button" value="⌛" disabled>
 {% else %}
-<input id="start" type="button" value="✔️">
+<input id="start" type="button" value="START">
 {% endif %}
 <table id="plylist">
     {% for p in players %}
         <tr id="player-{{p.id}}">
             <td id="player-{{p.id}}-ready" class='plylist-small'>{% if p.ready %}✔️{% endif %}</td>
             <td id="player-name-{{ p.id }}">{{ p.player.name }}</td>
+            {% if me.is_admin %}
+            <td><input id="kick-player-{{p.id}}" class="player_kick_btn" type='button' value='❌' onclick="kick_player({{p.id}})"></td>
+            {% endif %}
         </tr>
     {% endfor %}
 </table>

@@ -5,8 +5,9 @@ ws.addEventListener('message', function(event) {
         $('#plylist').append(`
             <tr id="player-${data["player_id"]}">
                 <td id="player-${data["player_id"]}-ready"></td>
-                <td id="player-name-${data["player_id"]}">${data["player_name"]}</td>
-            </tr>`)
+                <td id="player-name-${data["player_id"]}">${data["player_name"]}</td>` +
+                (me_is_admin ? `<td><input class="player_kick_btn" type='button' value='❌' onclick="kick_player(${data["player_id"]})"></td>` : '') +
+            `</tr>`)
     } else if (data['msg_type'] == 'player_left') {
         $('#player-' + data['player_id']).remove()
     } else if (data['msg_type'] == 'player_ready') {
