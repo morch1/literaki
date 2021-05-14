@@ -15,4 +15,6 @@ urlpatterns = [
     path('game/<str:game_token>/kick_player', views.kick_player, name='kick_player'),
 
     path('game/<str:game_token>/place_letters', views.place_letters, name='place_letters'),
+    path('game/<str:game_token>/exchange_letters', views.exchange_letters, name='exchange_letters'),
+    path('game/<str:game_token>/vote', views.vote, name='vote'),
 ]

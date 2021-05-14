@@ -12,10 +12,10 @@ body {
 #game-side {
     grid-column-start: 2;
     padding: 4px;
-    border: 4px solid black;
 }
 
 #board {
+    user-select: none;
     border: 4px solid black;
     display: grid;
     width: 600px;
@@ -63,7 +63,11 @@ body {
     grid-template-columns: repeat(7, 40px);
     grid-auto-rows: 40px;
     gap: 4px;
-    padding: 4px;
+    /* padding: 4px; */
+    box-shadow: -2px -2px 8px 3px rgba(0, 0, 0, 0.3) inset;
+    background-color: #bbb;
+    border: 4px solid black;
+    margin-bottom: 4px;
 }
 
 .letter {
@@ -85,8 +89,8 @@ body {
 }
 
 .myletter-slot {
-    box-shadow: -2px -2px 8px 3px rgba(0, 0, 0, 0.3) inset;
-    background-color: #bbb;
+    /* box-shadow: -2px -2px 8px 3px rgba(0, 0, 0, 0.3) inset;
+    background-color: #bbb; */
     padding: 3px;
 }
 
@@ -141,4 +145,17 @@ body {
 
 .player_name_left {
     text-decoration: line-through;
+}
+
+#myletters-checkboxes {
+    position: absolute;
+    display: grid;
+    width: 304px;
+    grid-template-columns: repeat(7, 40px);
+    grid-auto-rows: 40px;
+    gap: 4px;
+}
+
+.myletter-checkbox {
+    margin: 0;
 }

@@ -5,7 +5,9 @@
 <script>
     var my_letters = "{{ me.letters }}";
     var current_player_id = "{{ game.current_player.id }}";
-    var voting = "{{ game.voting }}" == "True";
+    var voting = {% if game.voting %}true{% else %}false{% endif %};
+    var voted = {% if me.vote is None %}false{% else %}true{% endif %};
+    var render_id = "{{ render_id }}";
 </script>
 <script src="{% static 'literakiapp/DragDropTouch.js' %}"></script>
 <script src="{% static 'literakiapp/game.js' %}?1"></script>
@@ -29,10 +31,15 @@
             {% for i in  '0123456'|make_list %}
                 <div id='myletter-slot-{{ i }}' class='myletter-slot droppable' ondrop='on_field_drop(event)' ondragover='on_field_dragover(event)' data-x="-1" data-y="{{i}}"></div>
             {% endfor %}
+            <div id='myletters-checkboxes'>
+                {% for i in  '0123456'|make_list %}
+                    <input id='myletter-exchange-{{ i }}' type="checkbox" class='myletter-checkbox'>
+                {% endfor %}
+            </div>
         </div>
         <div id='buttons' class='game-btns'>
             <input id='btn_submit' type='button' value="{% if game.voting %}⌛{% else %}✔️{% endif %}" class='game-btn'>
-            <input id='btn_exchange' type='button' value='wymiana' class='game-btn'>
+            <input id='btn_exchange' type='button' value='wymień' class='game-btn'>
         </div>
         <div id='vote_buttons' class='game-btns'>
             <input id='btn_vote_accept' type='button' value='✔️' class='game-btn'>
@@ -41,7 +48,7 @@
         <table id="plylist">
             {% for p in players %}
                 <tr id="player-{{p.id}}">
-                    <td id="player-{{p.id}}-current" class="plylist-small">{% if p == game.current_player %}⮞{% endif %}</td>
+                    <td id="player-{{p.id}}-current" class="plylist-small"></td>
                     <td id="player-name-{{ p.id }}" {% if p.left %}class="player_name_left"{% endif %} >{{ p.player.name }}</td>
                     {% if me.is_admin %}
                     <td><input id="kick-player-{{p.id}}" class="player_kick_btn" type='button' value='❌' onclick="kick_player({{p.id}})" {% if p.left %}disabled{% endif %}></td>

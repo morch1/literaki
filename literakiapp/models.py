@@ -31,6 +31,10 @@ class Game(models.Model):
     voting = models.BooleanField(default=False)
     current_player = models.ForeignKey('PlayerInGame', on_delete=models.SET_NULL, null=True, default=None, related_name='current_in_game')
 
+    def get_current_player(self):
+        self.current_player.refresh_from_db()
+        return self.current_player
+
     def __str__(self) -> str:
         return self.token
 
