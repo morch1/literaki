@@ -3,7 +3,13 @@ function redraw_letters() {
     $('.myletter').remove();
     for (let i = 0; i < my_letters.length; i++) {
         const letter = my_letters[i];
-        $('#myletter-slot-' + i).html(`<div id='myletter-${i}' class='myletter letter' ondragstart='on_letter_dragstart(event)' data-letter_id='${i}' data-letter='${letter}'>${letter}</div>`)
+        const points = letter_points.get(letter);
+        $('#myletter-slot-' + i).html(`
+            <div id='myletter-${i}' class='myletter letter' ondragstart='on_letter_dragstart(event)' data-letter_id='${i}' data-letter='${letter}'>
+                ${letter}
+                ${points > 0 ? `<div class='letter-points'>${points}</div>` : ''}
+            </div>
+        `)
     }
 }
 
@@ -70,11 +76,15 @@ ws.addEventListener('message', function(event) {
     if (data['msg_type'] == 'player_left') {
         $('#player-name-' + data['player_id']).addClass('player_name_left');
         $('#letters_left').text(data['letters_left']);
-        // TODO: update current player
     } else if (data['msg_type'] == 'vote_start') {
         voting = true;
         data['letters'].forEach(letter_data => {
-            $(`#field-${letter_data[2]}-${letter_data[1]}`).append(`<div class="letter letter-undecided">${letter_data[0]}</div>`);
+            let points = letter_points.get(letter_data[0]);
+            $(`#field-${letter_data[2]}-${letter_data[1]}`).append(`
+            <div class="letter letter-undecided">
+                ${letter_data[0]}
+                ${points > 0 ? `<div class='letter-points'>${points}</div>` : ''}
+            </div>`);
         });
         if (me_id != current_player_id) {
             $("#buttons").hide()
@@ -126,7 +136,7 @@ $(function() {
             $.post('/game/' + game_token + '/exchange_letters', {
                 letters: JSON.stringify(exchanged_letters)
             });
-    } else {
+        } else {
             $.post('/game/' + game_token + '/place_letters', {
                 letters: JSON.stringify(Object.fromEntries(placed_letters))
             });

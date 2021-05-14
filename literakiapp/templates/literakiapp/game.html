@@ -1,5 +1,6 @@
 {% extends 'literakiapp/game_common.html' %}
 {% load static %}
+{% load literaki_extras %}
 
 {% block game_head %}
 <script>
@@ -8,6 +9,10 @@
     var voting = {% if game.voting %}true{% else %}false{% endif %};
     var voted = {% if me.vote is None %}false{% else %}true{% endif %};
     var render_id = "{{ render_id }}";
+    var letter_points = new Map();
+    {% for letter, points in letter_points.items %}
+        letter_points.set('{{ letter }}', {{ points }});
+    {% endfor %}
 </script>
 <script src="{% static 'literakiapp/DragDropTouch.js' %}"></script>
 <script src="{% static 'literakiapp/game.js' %}?1"></script>
@@ -18,10 +23,28 @@
     <div id='board'>
     {% for row in board %}
         {% for field in row %}
-            <div id="field-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}" class='board-field field-{{ field.0 }} droppable' ondrop='on_field_drop(event)' ondragover='on_field_dragover(event)' data-x="{{forloop.counter0}}" data-y="{{forloop.parentloop.counter0}}">
-                {% if field.1 %}
-                    <div class="letter {% if not field.1.accepted %}letter-undecided{% endif %}">{{field.1.letter}}</div>
-                {% endif %}
+            <div class='board-field-bg field-{{ field.0 }}'>
+                <div class='field-multiplier'>
+                    {% if field.0 == 2 %}
+                        litera<br>X 2
+                    {% elif field.0 == 3 %}
+                        litera<br>X 3
+                    {% elif field.0 == 4 %}
+                        słowo<br>X 2
+                    {% elif field.0 == 5 %}
+                        słowo<br>X 3
+                    {% endif %}
+                </div>
+                <div id="field-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}" class='board-field droppable' ondrop='on_field_drop(event)' ondragover='on_field_dragover(event)' data-x="{{forloop.counter0}}" data-y="{{forloop.parentloop.counter0}}">
+                    {% if field.1 %}
+                        <div class="letter {% if not field.1.accepted %}letter-undecided{% endif %}">
+                            {{field.1.letter}}
+                            {% if letter_points|get_item:field.1.letter > 0 %}
+                                <div class='letter-points'>{{ letter_points|get_item:field.1.letter }}</div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         {% endfor %}
     {% endfor %}
@@ -53,7 +76,7 @@
                     {% if me.is_admin %}
                     <td><input id="kick-player-{{p.id}}" class="player_kick_btn" type='button' value='❌' onclick="kick_player({{p.id}})" {% if p.left %}disabled{% endif %}></td>
                     {% endif %}
-                    <td id="player-{{p.id}}-score" class="plylist-score">{{ p.score }}</td>
+                    <!--TODO: <td id="player-{{p.id}}-score" class="plylist-score">{{ p.score }}</td>-->
                 </tr>
             {% endfor %}
         </table>

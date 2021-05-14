@@ -26,10 +26,33 @@ body {
     grid-column-end: 2;
 }
 
-.board-field {
+.board-field-bg {
     border: 1px solid white;
     box-shadow: -2px -2px 8px 3px rgba(0, 0, 0, 0.3) inset;
     padding: 2px;
+    position: relative;
+    user-select: none;
+}
+
+.board-field {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    z-index: 2;
+}
+
+.field-multiplier {
+    position: absolute;
+    width: 34px;
+    top: 7px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 9px;
+    font-weight: 900;
+    z-index: 1;
+    opacity: 80%;
+    color: white;
+    text-shadow: 0 0 5px black;
 }
 
 .field-0 {
@@ -73,15 +96,25 @@ body {
 .letter {
     user-select: none;
     box-shadow: 0 0 5px 0 black inset;
-    border-radius: 5px;
+    border-radius: 3px;
     background-color: white;
     text-align: center;
-    width: 34px;
-    line-height: 33px;
+    width: 29px;
+    line-height: 29px;
     height: 34px;
+    padding-right: 5px;
     vertical-align: middle;
     font-size: 16px;
     font-weight: 900;
+    position: absolute;
+}
+
+.letter-points {
+    position: absolute;
+    top: 10px;
+    right: 5px;
+    font-size: 10px;
+    /* font-weight: 100; */
 }
 
 .letter-undecided {

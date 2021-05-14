@@ -8,7 +8,7 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Max, Q
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
-from .models import Game, LetterOnBoard, PlayerInGame, randid
+from .models import Game, LetterOnBoard, PlayerInGame, randid, BOARD_LAYOUT, LETTER_POINTS
 
 
 def _broadcast_update(game_token, msg_type, data=None):
@@ -69,25 +69,8 @@ def game(request, game_token):
     else:
         if not game_player:
             raise PermissionDenied('nie można dołączyć w trakcie gry')
-        board_layout = [
-            [5, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 5],
-            [0, 4, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 4, 0],
-            [0, 0, 4, 0, 0, 0, 2, 0, 2, 0, 0, 0, 4, 0, 0],
-            [0, 0, 0, 4, 0, 0, 0, 2, 0, 0, 0, 4, 0, 0, 0],
-            [0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0],
-            [0, 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 3, 0],
-            [0, 0, 2, 0, 0, 0, 2, 0, 2, 0, 0, 0, 2, 0, 0],
-            [5, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 5],
-            [0, 0, 2, 0, 0, 0, 2, 0, 2, 0, 0, 0, 2, 0, 0],
-            [0, 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 3, 0],
-            [0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0],
-            [0, 0, 0, 4, 0, 0, 0, 2, 0, 0, 0, 4, 0, 0, 0],
-            [0, 0, 4, 0, 0, 0, 2, 0, 2, 0, 0, 0, 4, 0, 0],
-            [0, 4, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 4, 0],
-            [5, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 5],
-        ]
         board = []
-        for y, row in enumerate(board_layout):
+        for y, row in enumerate(BOARD_LAYOUT):
             r = []
             for x, field in enumerate(row):
                 r.append((field, game.letteronboard_set.filter(x=x, y=y).first()))
@@ -98,6 +81,7 @@ def game(request, game_token):
             'me': game_player,
             'players': players,
             'board': board,
+            'letter_points': LETTER_POINTS,
             'render_id': randid(),
         }
         return render(request, 'literakiapp/game.html', context)
