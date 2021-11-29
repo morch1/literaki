@@ -13,7 +13,7 @@
 {% endif %}
 <table id="plylist">
     {% for p in players %}
-        <tr id="player-{{p.id}}">
+        <tr id="player-{{p.id}}" class='plylist-row'>
             <td id="player-{{p.id}}-ready" class='plylist-small'>{% if p.ready %}✔️{% endif %}</td>
             <td id="player-name-{{ p.id }}">{{ p.player.name }}</td>
             {% if me.is_admin %}

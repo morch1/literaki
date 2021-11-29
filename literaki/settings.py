@@ -10,7 +10,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 if TEST_SERVER:
     DEBUG = True
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '192.168.100.11', 'x.morchkovalski.com']
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '192.168.100.11', '10.8.0.6', 'x.morchkovalski.com']
     STATIC_URL = '/static/'
     DATABASES = {
         'default': {

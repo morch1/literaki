@@ -2,10 +2,10 @@ import enum
 import random
 import json
 from literaki.settings import MAX_PLAYERS
-from django.http.response import Http404, HttpResponse
+from django.http.response import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.core.exceptions import PermissionDenied
-from django.db.models import Max, Q
+from django.core.exceptions import PermissionDenied, ValidationError
+from django.db.models import Q
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from .models import Game, LetterOnBoard, PlayerInGame, randid, BOARD_LAYOUT, LETTER_POINTS
@@ -167,6 +167,40 @@ def kick_player(request, game_token):
     return HttpResponse()
 
 
+def _check_letters(game, placed_letters):
+    if len(placed_letters) == 0:
+        return True
+    letter_positions = list(placed_letters.values())
+    word_x, word_y = letter_positions[0]
+    word_x, word_y = int(word_x), int(word_y)
+    xs = sorted(int(x) for [x, _] in letter_positions)
+    ys = sorted(int(y) for [_, y] in letter_positions)
+    if LetterOnBoard.objects.filter(game=game).first() is None and ['7', '7'] not in letter_positions:
+        return False
+    if all(int(x) == word_x for [x, _] in letter_positions):
+        if LetterOnBoard.objects.filter(game=game).first() is not None and LetterOnBoard.objects.filter(Q(y__gte=min(ys) - 1, y__lte=max(ys) + 1, x=word_x) | Q(y__gte=min(ys), y__lte=max(ys), x__in=[word_x - 1, word_x + 1]), game=game).first() is None:
+            return False
+        for y in range(min(ys), max(ys) + 1):
+            if y not in ys and LetterOnBoard.objects.filter(game=game, x=word_x, y=y).first() is None:
+                return False
+        return True
+    elif all(int(y) == word_y for [_, y] in letter_positions):
+        if LetterOnBoard.objects.filter(game=game).first() is not None and LetterOnBoard.objects.filter(Q(x__gte=min(xs) - 1, x__lte=max(xs) + 1, y=word_y) | Q(x__gte=min(xs), x__lte=max(xs), y__in=[word_y - 1, word_y + 1]), game=game).first() is None:
+            return False
+        for x in range(min(xs), max(xs) + 1):
+            if x not in xs and LetterOnBoard.objects.filter(game=game, x=x, y=word_y).first() is None:
+                return False
+        return True
+    else:
+        return False
+
+
+def check_letters(request, game_token):
+    game = get_object_or_404(Game, token=game_token)
+    placed_letters = json.loads(request.POST['letters'])
+    return JsonResponse({'placement_legal': _check_letters(game, placed_letters)})
+    
+
 def _next_player(game, accept=True):
         current_player = game.get_current_player()
 
@@ -178,11 +212,12 @@ def _next_player(game, accept=True):
         game.current_player = game.playeringame_set.filter(left=False).order_by('order').first()
         game.save()
 
-        _broadcast_update(game.token, 'vote_end', {
-            'next_player': game.current_player.id,
-            'accept': int(accept),
-            'letters_left': len(game.letters),
-        })
+        if game.current_player is not None:
+            _broadcast_update(game.token, 'vote_end', {
+                'next_player': game.current_player.id,
+                'accept': int(accept),
+                'letters_left': len(game.letters),
+            })
 
 
 def place_letters(request, game_token):
@@ -194,7 +229,8 @@ def place_letters(request, game_token):
     if len(placed_letters) == 0:
         _next_player(game)
     else:
-        # TODO: check if correct placement
+        if not _check_letters(game, placed_letters):
+            raise ValidationError('illegal letter placement')
         player_letters = game_player.letters
         letters_broadcast = []
         for i, [x, y] in placed_letters.items():
@@ -225,7 +261,7 @@ def exchange_letters(request, game_token):
         return HttpResponse()
 
     exchanged_letters = json.loads(request.POST['letters'])
-    print(exchanged_letters)
+    # print(exchanged_letters)
     game_letters = list(game.letters)[len(exchanged_letters):]
     player_letters = list(game_player.letters)
     for i, new_letter in zip(exchanged_letters, game.letters):
@@ -275,7 +311,10 @@ def vote(request, game_token):
             if not current_player.left:
                 current_player.letters += game.letters[:len(letters)]
                 game.letters = game.letters[len(letters):]
-            # TODO: give player points
+            # TODO: przyznaj punkty
+            # 1. suma za litery kazdego nowego slowa
+            # 2. bonus za kazde bonusowe pole na ktorym w tej turze zostala polozona litera
+            # 3. +50 za wykorzystanie 7 liter w jednej turze
         else:
             for letter in letters:
                 if current_player.left:
@@ -298,3 +337,4 @@ def vote(request, game_token):
 
         _next_player(game, n_true >= n_false)
     return HttpResponse()
+    # TODO: detect end of game

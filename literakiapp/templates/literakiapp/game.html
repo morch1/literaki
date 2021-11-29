@@ -50,6 +50,20 @@
     {% endfor %}
     </div>
     <div id="game-side">
+        <div class='action_box'>
+            <p class='letters-left'>pozostało <span id="letters_left">{{game.letters|length}}</span> liter</p>
+        </div>
+        <table id="plylist">
+            {% for p in players %}
+                <tr id="player-{{p.id}}" class='plylist-row'>
+                    <td id="player-name-{{ p.id }}" {% if p.left %}class="player_name_left"{% endif %} >{{ p.player.name }}</td>
+                    <td id="player-{{p.id}}-score" class="plylist-score">{{ p.score }}</td>
+                    {% if me.is_admin %}
+                    <td><input id="kick-player-{{p.id}}" class="player_kick_btn" type='button' value='❌' onclick="kick_player({{p.id}})" {% if p.left %}disabled{% endif %}></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
         <div id='my-letters'>
             {% for i in  '0123456'|make_list %}
                 <div id='myletter-slot-{{ i }}' class='myletter-slot droppable' ondrop='on_field_drop(event)' ondragover='on_field_dragover(event)' data-x="-1" data-y="{{i}}"></div>
@@ -60,27 +74,24 @@
                 {% endfor %}
             </div>
         </div>
-        <div id='buttons' class='game-btns'>
-            <input id='btn_submit' type='button' value="{% if game.voting %}⌛{% else %}✔️{% endif %}" class='game-btn'>
-            <input id='btn_exchange' type='button' value='wymień' class='game-btn'>
+        <div id='your_turn_box' class='action_box'>
+            <p>twój ruch!</p>
+            <div id='buttons' class='game-btns'>
+                <input id='btn_submit' type='button' value="{% if game.voting %}⌛{% else %}pomiń{% endif %}" class='game-btn'>
+                <input id='btn_exchange' type='button' value='wymień' class='game-btn'>
+            </div>
+            <div id='exchange_buttons' class='game-btns'>
+                <input id='btn_exchange_submit' type='button' value="✔️" class='game-btn'>
+                <input id='btn_exchange_cancel' type='button' value='anuluj' class='game-btn'>
+            </div>
         </div>
-        <div id='vote_buttons' class='game-btns'>
-            <input id='btn_vote_accept' type='button' value='✔️' class='game-btn'>
-            <input id='btn_vote_reject' type='button' value='❌' class='game-btn'>
+        <div id='voting_box' class='action_box'>
+            <p>czy akceptujesz te litery?</p>
+            <div id='vote_buttons' class='game-btns'>
+                <input id='btn_vote_accept' type='button' value='✔️' class='game-btn'>
+                <input id='btn_vote_reject' type='button' value='❌' class='game-btn'>
+            </div>
         </div>
-        <table id="plylist">
-            {% for p in players %}
-                <tr id="player-{{p.id}}">
-                    <td id="player-{{p.id}}-current" class="plylist-small"></td>
-                    <td id="player-name-{{ p.id }}" {% if p.left %}class="player_name_left"{% endif %} >{{ p.player.name }}</td>
-                    {% if me.is_admin %}
-                    <td><input id="kick-player-{{p.id}}" class="player_kick_btn" type='button' value='❌' onclick="kick_player({{p.id}})" {% if p.left %}disabled{% endif %}></td>
-                    {% endif %}
-                    <!--TODO: <td id="player-{{p.id}}-score" class="plylist-score">{{ p.score }}</td>-->
-                </tr>
-            {% endfor %}
-        </table>
-        <p class='letters-left'>pozostało <span id="letters_left">{{game.letters|length}}</span> liter</p>
     </div>
 </div>
 {% endblock %}

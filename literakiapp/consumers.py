@@ -16,7 +16,7 @@ class GameConsumer(JsonWebsocketConsumer):
 
     def message(self, event):
         data = dict((k, v) for k, v in event.items() if k!= 'type')
-        print(data)
+        # print(data)
         self.send_json(data)
 
 
@@ -35,5 +35,5 @@ class GamePlayerConsumer(JsonWebsocketConsumer):
 
     def message(self, event):
         data = dict((k, v) for k, v in event.items() if k!= 'type')
-        print(data)
+        # print(data)
         self.send_json(data)
