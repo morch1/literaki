@@ -153,6 +153,12 @@ body {
     font-size: 30px;
 }
 
+#gameLink {
+    width: 304px;
+    height: 25px;
+    font-size: 20px;
+}
+
 #plylist {
     width: 306px;
     margin-top: 20px;

@@ -6,6 +6,8 @@
 {% endblock %}
 
 {% block game_body %}
+<p>link do gry:</p>
+<p><input id='gameLink' value='{{request.build_absolute_uri}}' readonly></p>
 {% if me.ready %}
 <input id="start" type="button" value="⌛" disabled>
 {% else %}
