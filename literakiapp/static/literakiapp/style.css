@@ -146,7 +146,7 @@ body {
     height: 50px;
 }
 
-#start {
+.start-btn {
     width: 304px;
     height: 70px;
     margin: 4px;

@@ -5,7 +5,7 @@ app_name = 'literakiapp'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('create/', views.create_game, name='create_game'),
+    # path('create/', views.create_game, name='create_game'),
 
     path('game/<str:game_token>/', views.game, name='game'),
 

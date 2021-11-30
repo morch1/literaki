@@ -8,6 +8,10 @@ load_dotenv(BASE_DIR / '.env')
 TEST_SERVER = bool(int(os.getenv('TEST_SERVER', False)))
 SECRET_KEY = os.getenv('SECRET_KEY')
 
+RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_SITE_KEY')
+RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_SECRET_KEY')
+RECAPTCHA_REQUIRED_SCORE = 0.85
+
 if TEST_SERVER:
     DEBUG = True
     ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '192.168.100.11', '10.8.0.6', 'x.morchkovalski.com']
@@ -59,6 +63,7 @@ else:
 MAX_PLAYERS = int(os.getenv('MAX_PLAYERS', 4))
 
 INSTALLED_APPS = [
+    'captcha',
     'literakiapp.apps.LiterakiappConfig',
     'django.contrib.admin',
     'django.contrib.auth',

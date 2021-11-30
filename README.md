@@ -10,5 +10,4 @@ scrabble at home:
 ## to do:
 * points
 * detect end of game
-* recaptcha to start new game
 * demo site

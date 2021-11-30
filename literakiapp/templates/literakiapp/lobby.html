@@ -9,9 +9,9 @@
 <p>link do gry:</p>
 <p><input id='gameLink' value='{{request.build_absolute_uri}}' readonly></p>
 {% if me.ready %}
-<input id="start" type="button" value="⌛" disabled>
+<input id="start" class='start-btn' type="button" value="⌛" disabled>
 {% else %}
-<input id="start" type="button" value="START">
+<input id="start" class='start-btn' type="button" value="START">
 {% endif %}
 <table id="plylist">
     {% for p in players %}

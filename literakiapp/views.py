@@ -7,7 +7,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import Q
 from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
+from asgiref.sync import async_to_sync  
+from literakiapp.forms import CaptchaForm
 from .models import Game, LetterOnBoard, PlayerInGame, randid, BOARD_LAYOUT, LETTER_POINTS
 
 
@@ -27,18 +28,24 @@ def _send_update(game_player_token, msg_type, data=None):
 
 
 def index(request):
-    return render(request, 'literakiapp/index.html')
+    if request.method == 'POST':
+        form = CaptchaForm(request.POST)
+        if form.is_valid():
+            game = Game.objects.create()
+            PlayerInGame.objects.create(game=game, player=request.player, is_admin=True)
+            return redirect('literakiapp:game', game_token=game.token)
+        else:
+            raise PermissionDenied('captcha verification failed')
+    else:
+        context = {
+            "captcha": CaptchaForm(),
+        }
+        return render(request, 'literakiapp/index.html', context)
 
 
 def error(request, exception):
     context = {'msg': str(exception)}
     return render(request, 'literakiapp/error.html', context)
-
-
-def create_game(request):
-    game = Game.objects.create()
-    PlayerInGame.objects.create(game=game, player=request.player, is_admin=True)
-    return redirect('literakiapp:game', game_token=game.token)
 
 
 def game(request, game_token):
