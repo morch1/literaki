@@ -1,7 +1,7 @@
 # literaki
-"we have scrabble at home"
+multiplayer browser-based implementation of scrabble
 
-scrabble at home:
+(currently only in Polish)
 
 ![screenshot](screenshot.png)
 
