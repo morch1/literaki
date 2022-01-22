@@ -1,13 +1,11 @@
 # literaki
-multiplayer browser-based implementation of scrabble
-
-(currently only in Polish)
+Scrabble w przeglądarce
 
 ![screenshot](screenshot.png)
 
 ---
 
 ## to do:
-* points
-* detect end of game
-* demo site
+* zliczanie punktów
+* wykrywanie końca gry
+* frontend z użyciem React'a

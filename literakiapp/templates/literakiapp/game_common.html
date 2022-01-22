@@ -17,10 +17,10 @@
 {% endblock %}
 
 {% block body %}
-<p>
+<div id="top-controls">
 <input id="leave" type="button" value="<< wyjdź">
 <input id="plyname" type="text" value="{{ me.player.name }}" maxlength="16">
 <input id="change_name" type="button" value="zmień nick">
-</p>
+</div>
 {% block game_body %}{% endblock %}
 {% endblock %}

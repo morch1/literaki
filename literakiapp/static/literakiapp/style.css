@@ -3,9 +3,35 @@ body {
     background-color: #eee;
 }
 
+#wrap {
+    margin: auto;
+    width: 960px;
+    text-align: center;
+}
+
+.footer {
+    font-size: smaller;
+    text-align: center;
+}
+
+#top-controls {
+    width: auto;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* #top-controls input {
+    width: 90px;
+} */
+
+#lobby-wrap {
+    /* margin: auto;
+    width: 310px; */
+    text-align: center;
+}
+
 #game-wrap {
     display: grid;
-    width: 900px;
     grid-template-columns: 630px 328px;
     grid-auto-rows: 602px;
 }
@@ -92,7 +118,8 @@ body {
     box-shadow: -2px -2px 8px 3px rgba(0, 0, 0, 0.3) inset, 0 0 8px 3px rgba(0, 0, 0, 0.3);
     background-color: #bbb;
     border: 1px solid black;
-    margin-bottom: 4px;
+    margin: auto;
+    margin-bottom: 20px;
 }
 
 .letter {
@@ -146,6 +173,10 @@ body {
     height: 50px;
 }
 
+#index_form {
+    text-align: center;
+}
+
 .start-btn {
     width: 304px;
     height: 70px;
@@ -161,6 +192,7 @@ body {
 
 #plylist {
     width: 306px;
+    margin: auto;
     margin-top: 20px;
     margin-bottom: 20px;
     border: 1px solid black;
@@ -220,6 +252,7 @@ tr.plylist-current td {
     width: 304px;
     margin-top: 20px;
     margin-bottom: 20px;
+    margin: auto;
     background-color: #fff;
 }
 

@@ -57,7 +57,7 @@
             {% for p in players %}
                 <tr id="player-{{p.id}}" class='plylist-row'>
                     <td id="player-name-{{ p.id }}" {% if p.left %}class="player_name_left"{% endif %} >{{ p.player.name }}</td>
-                    <td id="player-{{p.id}}-score" class="plylist-score">{{ p.score }}</td>
+                    <!--<td id="player-{{p.id}}-score" class="plylist-score">{{ p.score }}</td>-->
                     {% if me.is_admin %}
                     <td><input id="kick-player-{{p.id}}" class="player_kick_btn" type='button' value='❌' onclick="kick_player({{p.id}})" {% if p.left %}disabled{% endif %}></td>
                     {% endif %}
