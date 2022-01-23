@@ -101,4 +101,4 @@ ENV/
 .idea
 /local
 /static
-/data
+.certbot
