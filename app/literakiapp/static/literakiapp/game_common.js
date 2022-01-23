@@ -1,7 +1,12 @@
-var ws_url = 'ws://' + window.location.host + '/ws/' + game_token + '/';
+var wsProtocol = 'ws://';
+if (window.location.protocol === 'https:') {
+    wsProtocol = 'wss://';
+}
+
+var ws_url = wsProtocol + window.location.host + '/ws/' + game_token + '/';
 var ws = new ReconnectingWebSocket(ws_url);
 
-var ws_priv_url = 'ws://' + window.location.host + '/ws/priv/' + ws_priv_id + '/';
+var ws_priv_url = wsProtocol + window.location.host + '/ws/priv/' + ws_priv_id + '/';
 var ws_priv = new ReconnectingWebSocket(ws_priv_url);
 
 ws.addEventListener('message', function(event) {
