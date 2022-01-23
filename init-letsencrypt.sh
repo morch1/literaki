@@ -16,6 +16,9 @@ do
     esac
 done
 
+: ${domains:?Missing -d}
+: ${email:?Missing -e}
+
 rsa_key_size=4096
 data_path="./.certbot"
 staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
