@@ -1,64 +1,43 @@
 import os
-from dotenv import load_dotenv
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR / '.env')
 
-TEST_SERVER = bool(int(os.getenv('TEST_SERVER', False)))
+DEBUG = int(os.getenv('DEBUG', 0))
 SECRET_KEY = os.getenv('SECRET_KEY')
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(' ')
 
 RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_SITE_KEY')
 RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_SECRET_KEY')
 RECAPTCHA_REQUIRED_SCORE = 0.85
 
-if TEST_SERVER:
-    DEBUG = True
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '192.168.100.11', '10.8.0.6', 'x.morchkovalski.com']
-    STATIC_URL = '/static/'
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'local' / 'db.sqlite3',
-        }
-    }
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "channels.layers.InMemoryChannelLayer"
-        }
-    }
-else:
-    DEBUG = False
-    ALLOWED_HOSTS = ['demo.morchkovalski.com']
-    STATIC_ROOT = '/srv/static.morchkovalski.com/literaki'
-    STATIC_URL = 'https://static.morchkovalski.com/literaki'
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    STATICFILES_FINDERS = (
-        'django.contrib.staticfiles.finders.FileSystemFinder',
-        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-        'compressor.finders.CompressorFinder',
-    )
-    COMPRESS_ENABLED = True
-    COMPRESS_OFFLINE = True
-    COMPRESS_CSS_FILTERS = ['compressor.filters.css_default.CssAbsoluteFilter', 'compressor.filters.cssmin.CSSMinFilter']
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.getenv('DB_NAME'),
-            'USER': os.getenv('DB_USER'),
-            'PASSWORD': os.getenv('DB_PASSWORD'),
-            'HOST': os.getenv('DB_HOST'),
-            'PORT': os.getenv('DB_PORT'),
+DATABASES = {
+    'default': {
+        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.getenv('DB_NAME', str(BASE_DIR / 'db.sqlite3')),
+        'USER': os.getenv('DB_USER', 'user'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'password'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': int(os.getenv('DB_PORT', '5432')),
+    },
+}
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
         },
-    }
-    CHANNEL_LAYERS = {
-        'default': {
-            'BACKEND': 'channels_redis.core.RedisChannelLayer',
-            'CONFIG': {
-                "hosts": [('127.0.0.1', 6379)],
-            },
-        },
-    }
+    },
+}
 
 MAX_PLAYERS = int(os.getenv('MAX_PLAYERS', 4))
 

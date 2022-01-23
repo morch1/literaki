@@ -23,4 +23,6 @@ $(function(){
         $(this).val('⌛')
         $(this).prop('disabled', true)
     });
+
+    $('#gameLink').val(window.location.href);
 });

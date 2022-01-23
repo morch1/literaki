@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./app
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./app/:/usr/src/app/
+    ports:
+      - 2137:8000
+      - 3000:3000
+    env_file:
+      - ./env/dev.env
+    depends_on:
+      - db
+  db:
+    image: postgres:13.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=literaki
+      - POSTGRES_PASSWORD=literaki
+      - POSTGRES_DB=literaki_dev
+  redis:
+    image: "redis:alpine"
+    expose: 
+      - 6379
+
+volumes:
+  postgres_data:

@@ -8,7 +8,7 @@
 {% block game_body %}
 <div id="lobby-wrap">
     <p>link do gry (wyślij pozostałym graczom):</p>
-    <p><input id='gameLink' value='{{request.build_absolute_uri}}' readonly></p>
+    <p><input id='gameLink' readonly></p>
     {% if me.ready %}
     <input id="start" class='start-btn' type="button" value="⌛" disabled>
     {% else %}

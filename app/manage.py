@@ -7,6 +7,15 @@ import sys
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'literaki.settings')
+
+    from django.conf import settings
+
+    if settings.DEBUG:
+        if os.getenv('RUN_MAIN') or os.getenv('WERKZEUG_RUN_MAIN'):
+            import debugpy
+            debugpy.listen(("0.0.0.0", 3000))
+            print('Attached!')
+
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

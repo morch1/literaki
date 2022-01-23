@@ -1,0 +1,8 @@
+channels==3.0.3
+channels-redis==3.3.1
+Django==3.1.7
+django-recaptcha==2.0.6
+python-dotenv==0.16.0
+psycopg2-binary==2.9.1
+debugpy==1.5.1
+gunicorn==20.1.0
