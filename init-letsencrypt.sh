@@ -8,7 +8,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-while getopts u:a:f: flag
+while getopts d:e: flag
 do
     case "${flag}" in
         d) domains=(${OPTARG});;
