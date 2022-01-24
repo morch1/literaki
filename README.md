@@ -1,6 +1,8 @@
 # literaki
 Scrabble w przeglądarce
 
+Demo: https://literaki.x.morchkovalski.com
+
 ![screenshot](screenshot.png)
 
 ---
