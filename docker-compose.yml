@@ -2,15 +2,16 @@ version: '3.8'
 
 services:
   web:
-    build: ./app
-    command: python manage.py runserver 0.0.0.0:8000
+    build:
+      context: ./app
+      dockerfile: Dockerfile.prod
+    command: daphne -b 0.0.0.0 -p 8000 literaki.asgi:application
     volumes:
-      - ./app/:/usr/src/app/
-    ports:
-      - 2137:8000
-      - 3000:3000
+      - static_volume:/home/app/web/staticfiles
+    expose:
+      - 8000
     env_file:
-      - ./env/dev.env
+      - ./env/prod-web.env
     depends_on:
       - db
       - redis
@@ -18,10 +19,16 @@ services:
     image: postgres:13.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=literaki
-      - POSTGRES_PASSWORD=literaki
-      - POSTGRES_DB=literaki_dev
+    env_file:
+      - ./env/prod-db.env
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+    expose:
+      - 80
+    depends_on:
+      - web
   redis:
     image: "redis:alpine"
     expose: 
@@ -29,3 +36,4 @@ services:
 
 volumes:
   postgres_data:
+  static_volume:
