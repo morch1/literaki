@@ -23,6 +23,7 @@ services:
       - ./env/prod-db.env
   nginx:
     build: ./nginx
+    hostname: literaki
     volumes:
       - static_volume:/home/app/web/staticfiles
     expose:
