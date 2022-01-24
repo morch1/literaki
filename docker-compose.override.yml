@@ -1,0 +1,8 @@
+# production config for standalone use
+
+version: '3.8'
+
+services:
+  nginx:
+    ports:
+      - 80:80

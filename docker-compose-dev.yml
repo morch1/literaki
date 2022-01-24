@@ -1,3 +1,5 @@
+# dev config
+
 version: '3.8'
 
 services:
@@ -7,8 +9,8 @@ services:
     volumes:
       - ./app/:/usr/src/app/
     ports:
-      - 2137:8000
-      - 3000:3000
+      - 8000:8000  # http
+      - 3000:3000  # debugger
     env_file:
       - ./env/dev.env
     depends_on:

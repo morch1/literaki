@@ -1,0 +1,15 @@
+# production config for use with nginx reverse proxy
+
+version: '3.8'
+
+services:
+  nginx:
+    hostname: literaki
+    expoose:
+      - 80
+    networks:
+      - reverse_default
+
+networks:
+  reverse_default:
+    external: true
