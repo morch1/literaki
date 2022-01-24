@@ -1,4 +1,5 @@
 # production config for use with nginx reverse proxy
+# base config: docker-compose.yml
 
 version: '3.8'
 

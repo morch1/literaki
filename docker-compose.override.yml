@@ -1,4 +1,5 @@
 # production config for standalone use
+# base config: docker-compose.yml
 
 version: '3.8'
 
